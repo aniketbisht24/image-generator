@@ -6,7 +6,7 @@ const removeSpinner = () => {
     document.querySelector('.spinner').classList.remove('show')
 }
 
-const generateImageRequest = async (image, size) => {
+const generateImageRequest = async (image, size, count) => {
     try {
         showSpinner();
         const response = await fetch('/generate-image', {
@@ -16,7 +16,8 @@ const generateImageRequest = async (image, size) => {
             },
             body: JSON.stringify({
                 image,
-                size
+                size,
+                count
             })
         })
 
@@ -27,11 +28,24 @@ const generateImageRequest = async (image, size) => {
 
         const data = await response.json();
 
-        const imageUrl = data.response[0].url
+        const imageContainer = document.querySelector('.image-container');
 
-        document.querySelector('#image').src = imageUrl
+        console.log('1', imageContainer)
 
-        console.log(imageUrl)
+        data.response.forEach((element) => {
+            const image = document.createElement('img');
+
+            image.src = element.url;
+            image.id="image";
+
+            imageContainer.appendChild(image)
+        })
+
+        // const imageUrl = data.response[0].url
+
+        // document.querySelector('#image').src = imageUrl
+
+        console.log('2', imageContainer)
         removeSpinner();
     }
     catch (error) {
@@ -43,17 +57,19 @@ const onSubmit = (e) => {
     e.preventDefault();
 
     document.querySelector('.msg').textContent = '';
-    document.querySelector('#image').src = '';
+
+    document.querySelectorAll('#image').forEach((e) => e.remove());
 
     const prompt = document.querySelector('#prompt').value
     const size = document.querySelector('#size').value
+    const count = document.querySelector('#count').value
 
-    if (prompt === '') {
+    if (prompt === '' || count <=0) {
         alert('Please enter the description of image to be displayed')
         return;
     }
 
-    generateImageRequest(prompt, size);
+    generateImageRequest(prompt, size, count);
 }
 
 document.querySelector('#image-form').addEventListener('submit', onSubmit);

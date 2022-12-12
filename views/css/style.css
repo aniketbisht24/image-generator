@@ -105,9 +105,17 @@ form button:hover {
   margin-top: 2rem;
 }
 
+.image-container{
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  margin: 50 px;
+}
+
 img {
   display: block;
   margin: auto;
+  border-radius: 15%;
 }
 
 .msg {
