@@ -33,11 +33,6 @@ const generateImage = async (req, res) => {
     }
 }
 
-const ping = (req, res) => {
-
-    res.status(200).json({ response: 'success' })
-}
-
 module.exports = {
     generateImage
 }
